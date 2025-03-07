@@ -122,3 +122,58 @@ def pcc_ccc_loss(labels_th, scores_th):
     CCC_loss = 1.0 - (CCC_v + CCC_a)/2
     return PCC_loss, CCC_loss, CCC_v, CCC_a
 
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def extract(Dict,element,Onlythis = None):
+    if Onlythis:
+        X = {name:Dict[name] for name in Onlythis}
+    else:
+        X = Dict
+        
+    values = []
+    for x in X:
+        values.append(X.get(x).get(element))
+    return values
+
+
+def extract_value(txt):
+    c =[]
+    tempt = txt.split('\t')
+    c.append(float(tempt[1][:-1]))
+    c.append(float(tempt[2][1:-2]))
+
+    return c
+
+def extract_itr(txt):
+    tempt = txt.split('\t')
+    return tempt[1][:-2]
+
+def staticsRead(path):
+    tempt = {}
+    with open(path,'r') as f:
+        while True:
+            itr = f.readline()
+            if not itr:
+                break
+
+            
+            pcc = f.readline()
+            
+            ccc = f.readline()
+            sagr = f.readline()
+            rmse = f.readline()
+            metrics = {
+                    'PCC':extract_value(pcc),
+                    'CCC':extract_value(ccc),
+                    'SAGR':extract_value(sagr),
+                    'RMSE':extract_value(rmse)
+                    }
+            tempt.update({extract_itr(itr):metrics})
+
+            f.readline()
+            f.readline()
+    return tempt
+
