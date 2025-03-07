@@ -177,3 +177,30 @@ def staticsRead(path):
             f.readline()
     return tempt
 
+
+
+def draw(model, legendPosition = (0,0), title = "Metrics Mean Value Over Iteration",Onlythis = None):
+    if Onlythis:
+        X = [int(x) for x in Onlythis]
+    else:
+        X = [int(x) for x in model.keys()]
+    pcc  = [np.mean(values) for values in extract(model,'PCC',Onlythis)] 
+    ccc  = [np.mean(values) for values in extract(model,'CCC',Onlythis)] 
+    sagr = [np.mean(values) for values in extract(model,'SAGR',Onlythis)] 
+    rmse = [np.mean(values) for values in extract(model,'RMSE',Onlythis)] 
+
+
+    plt.plot(X, pcc,label='pcc')
+    plt.plot(X, ccc,label='ccc')
+    plt.plot(X, sagr,label='sagr')
+    plt.plot(X, rmse,label='rmse')
+
+    plt.legend(loc="center", bbox_to_anchor=legendPosition)  # Điều chỉnh legend theo ý muốn
+
+
+    plt.xlabel("Iteration")
+    plt.ylabel("Metrics Mean Value")
+    plt.title(title)
+    plt.show()
+
+
